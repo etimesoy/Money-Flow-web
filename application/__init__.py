@@ -19,10 +19,10 @@ def create_app():
     login_manager.login_view = 'login'
 
     with app.app_context():
-        from . import routes
-        from . import auth
+        from . import routes, auth, settings
 
         app.register_blueprint(auth.auth_bp)
+        app.register_blueprint(settings.settings_bp)
 
         db.create_all()
 
