@@ -27,6 +27,7 @@ def login():
             next_page = request.args.get('next')
             return redirect(next_page or url_for('index'))
         flash('Invalid username/password combination, please try again')
+        return redirect(url_for('auth_bp.login'))
 
     return render_template('login.html', form=form)
 
@@ -48,6 +49,7 @@ def register():
             login_user(user)
             return redirect(url_for('index'))
         flash('A user with such username already exists')
+        return redirect(url_for('auth_bp.register'))
 
     return render_template('register.html', form=form)
 
