@@ -25,5 +25,6 @@ def create_app():
         app.register_blueprint(settings.settings_bp)
 
         db.create_all()
+        db.session.commit()
 
         return app
