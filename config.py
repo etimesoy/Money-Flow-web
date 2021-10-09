@@ -7,7 +7,7 @@ class Config:
     BOOTSTRAP_FONTAWESOME = True
     SECRET_KEY = 'd3s"a5hj;d3]fh4[l'
     CSRF_ENABLED = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///application.db'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite3'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
 
