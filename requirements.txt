@@ -13,5 +13,7 @@ Flask-Themes
 Flask-Uploads
 Flask-Wtf
 Flask-Session
+Flask-Security
 WTForms
 Werkzeug
+PyJWT==1.7.1

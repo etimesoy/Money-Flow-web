@@ -22,6 +22,13 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USERNAME = 'pavel.4.26.21@gmail.com'
+    MAIL_PASSWORD = 'rra-cFC-68U-HXh'
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    HOSTNAME = 'http://127.0.0.1:5000'
 
 
 class TestingConfig(Config):

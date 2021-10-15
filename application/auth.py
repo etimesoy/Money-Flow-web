@@ -2,8 +2,9 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
 
 from application import db, login_manager
-from application.forms import LoginForm, RegisterForm
+from application.forms import LoginForm, RegisterForm, ForgotPasswordForm, PasswordResetForm
 from application.models import User
+from application.services.email import send_email
 
 auth_bp = Blueprint(
     'auth_bp', __name__,
@@ -52,6 +53,49 @@ def register():
         return redirect(url_for('auth_bp.register'))
 
     return render_template('register.html', form=form)
+
+
+@auth_bp.route('/forgot_password/', methods=['GET', 'POST'])
+def forgot_password():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    form = ForgotPasswordForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            send_email(user)
+            flash('Email with reset link was sent, please check your inbox')
+            return redirect(url_for('auth_bp.forgot_password'))
+
+        flash('Invalid email, please try again')
+        return redirect(url_for('auth_bp.forgot_password'))
+
+    return render_template('forgot_password.html', form=form)
+
+
+@auth_bp.route('/password_reset/<username>/<password_reset_code>', methods=['GET', 'POST'])
+def password_reset(username: str, password_reset_code: str):
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    form = PasswordResetForm()
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        flash('Wrong username - user does not exist')
+        return redirect(url_for('auth_bp.forgot_password'))
+
+    if form.validate_on_submit():
+        user.set_password(form.new_password.data)
+        db.session.commit()
+        login_user(user)
+        return redirect(url_for('index'))
+
+    if user.verify_reset_token(password_reset_code, username):
+        return render_template('password_reset.html', form=form)
+    else:
+        flash('Wrong password reset code')
+        return redirect(url_for('auth_bp.forgot_password'))
 
 
 @auth_bp.route('/logout/')
