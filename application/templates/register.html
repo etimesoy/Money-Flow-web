@@ -4,6 +4,19 @@
 
 {% block content %}
 <div class="container h-100">
+    {% if get_flashed_messages() %}
+    <div class="modal fade" id="modal">
+        <div class="modal-dialog modal-title">
+            {% for message in get_flashed_messages() %}
+                <div class="alert alert-warning">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss=" modal">x</button>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>$("#modal").modal("show")</script>
+    {% endif %}
     <div class="d-flex justify-content-center h-100">
         <div class="user_card">
             <div class="d-flex justify-content-center">
@@ -12,98 +25,78 @@
                 </div>
             </div>
             <div class="d-flex justify-content-center form_container">
-                {% for message in get_flashed_messages() %}
-                    <div class="alert alert-warning">
-                        <button type="button" class="close" data-dismiss="alert">x</button>
-                        {{ message }}
-                    </div>
-                {% endfor %}
-                <form method="POST" action="{{ url_for('auth_bp.register') }}">
+                <form method="POST" action="{{ url_for("auth_bp.register") }}">
                     {{ form.csrf_token }}
                     <div class="input-group mb-2">
-                        {{ form.full_name.label }}
-                        {{ form.full_name(placeholder='Full name') }}
                         {% if form.full_name.errors %}
                             <ul class="errors">
                                 {% for error in form.full_email.errors %}
                                     <li>{{ error }}</li>{% endfor %}
                             </ul>
                         {% endif %}
-{#                        <div class="input-group-append">#}
-{#                            <span class="input-group-text"><i class="fas fa-user-tie"></i></span>#}
-{#                        </div>#}
-{#                        <input type="text" name="" class="form-control input_user" value="" placeholder="Full name">#}
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
+                        </div>
+                        {{ form.full_name(placeholder="Full name", class_="form-control input_user") }}
                     </div>
                     <div class="input-group mb-2">
-                        {{ form.username.label }}
-                        {{ form.username(placeholder='Username') }}
                         {% if form.username.errors %}
                             <ul class="errors">
                                 {% for error in form.username.errors %}
                                     <li>{{ error }}</li>{% endfor %}
                             </ul>
                         {% endif %}
-{#                        <div class="input-group-append">#}
-{#                            <span class="input-group-text"><i class="fas fa-user"></i></span>#}
-{#                        </div>#}
-{#                        <input type="text" name="" class="form-control input_user" value="" placeholder="Username">#}
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        {{ form.username(placeholder="Username", class_="form-control input_user") }}
                     </div>
                     <div class="input-group mb-2">
-                        {{ form.email.label }}
-                        {{ form.email(placeholder='youremail@example.com') }}
                         {% if form.email.errors %}
                             <ul class="errors">
                                 {% for error in form.email.errors %}
                                     <li>{{ error }}</li>{% endfor %}
                             </ul>
                         {% endif %}
-{#                        <div class="input-group-append">#}
-{#                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>#}
-{#                        </div>#}
-{#                        <input type="text" name="" class="form-control input_user" value="" placeholder="Email address">#}
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        </div>
+                        {{ form.email(placeholder="email@example.com", class_="form-control input_user") }}
                     </div>
                     <div class="input-group mb-2">
-                        {{ form.password.label }}
-                        {{ form.password }}
                         {% if form.password.errors %}
                             <ul class="errors">
                                 {% for error in form.password.errors %}
                                     <li>{{ error }}</li>{% endfor %}
                             </ul>
                         {% endif %}
-{#                        <div class="input-group-append">#}
-{#                            <span class="input-group-text"><i class="fas fa-key"></i></span>#}
-{#                        </div>#}
-{#                        <input type="password" name="" class="form-control input_pass" value="" placeholder="Password">#}
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        {{ form.password(placeholder="Password", class_="form-control input_pass") }}
                     </div>
                     <div class="input-group mb-2">
-                        {{ form.confirm.label }}
-                        {{ form.confirm }}
                         {% if form.confirm.errors %}
                             <ul class="errors">
                                 {% for error in form.confirm.errors %}
                                     <li>{{ error }}</li>{% endfor %}
                             </ul>
                         {% endif %}
-{#                        <div class="input-group-append">#}
-{#                            <span class="input-group-text"><i class="fas fa-key"></i></span>#}
-{#                        </div>#}
-{#                        <input type="password" name="" class="form-control input_pass" value="" placeholder="Confirm password">#}
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        {{ form.confirm(placeholder="Confirm password", class_="form-control input_pass") }}
                     </div>
                     <div class="d-flex justify-content-center mt-3 login_container">
-                        {{ form.submit }}
-{#                        <button type="button" name="button" class="btn login_btn">Register</button>#}
+                        {{ form.submit(class_="btn login_btn") }}
                     </div>
                 </form>
             </div>
-{#            <div class="mt-4">#}
-{#                <div class="d-flex justify-content-center links">#}
-{#                    Don't have an account? <a href="#" class="ml-2">Sign up</a>#}
-{#                </div>#}
-{#                <div class="d-flex justify-content-center links">#}
-{#                    <a href="#">Forgot your password?</a>#}
-{#                </div>#}
-{#            </div>#}
+            <div class="mt-4">
+                <div class="d-flex justify-content-center links">
+                    Already have an account? <a href="{{ url_for("auth_bp.login") }}" class="ml-2">Log in</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
