@@ -30,7 +30,7 @@ def login():
         flash('Invalid username/password combination, please try again')
         return redirect(url_for('auth_bp.login'))
 
-    return render_template('login.html', form=form)
+    return render_template('auth/login.html', form=form)
 
 
 @auth_bp.route('/register/', methods=['GET', 'POST'])
@@ -52,7 +52,7 @@ def register():
         flash('A user with such username already exists')
         return redirect(url_for('auth_bp.register'))
 
-    return render_template('register.html', form=form)
+    return render_template('auth/register.html', form=form)
 
 
 @auth_bp.route('/forgot_password/', methods=['GET', 'POST'])
@@ -71,7 +71,7 @@ def forgot_password():
         flash('Invalid email, please try again')
         return redirect(url_for('auth_bp.forgot_password'))
 
-    return render_template('forgot_password.html', form=form)
+    return render_template('auth/forgot_password.html', form=form)
 
 
 @auth_bp.route('/password_reset/<username>/<password_reset_code>', methods=['GET', 'POST'])
@@ -92,7 +92,7 @@ def password_reset(username: str, password_reset_code: str):
         return redirect(url_for('index'))
 
     if user.verify_reset_token(password_reset_code, username):
-        return render_template('password_reset.html', form=form)
+        return render_template('auth/password_reset.html', form=form)
     else:
         flash('Wrong password reset code')
         return redirect(url_for('auth_bp.forgot_password'))
