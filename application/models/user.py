@@ -11,6 +11,10 @@ from application import db
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
+    __table_args__ = (
+        db.CheckConstraint('len(split(full_name, ' ')) > 1'),
+    )
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(500), nullable=False)

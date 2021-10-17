@@ -12,7 +12,6 @@ class UserCategoriesLimitsAsc(UserMixin, db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
-    name = db.Column(db.String(64), nullable=False)
     limit_size = db.Column(db.Integer)
     limit_month_number = db.Column(db.Integer)
     currency_id = db.Column(db.Integer, db.ForeignKey('currencies.id'))
