@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 
 from application import db, login_manager
 from application.forms import LoginForm, RegisterForm, ForgotPasswordForm, PasswordResetForm
-from application.models import User
+from application.models.user import User
 from application.services.email import send_email
 
 auth_bp = Blueprint(

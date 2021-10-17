@@ -12,10 +12,10 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(64), unique=True)
-    password = db.Column(db.String(500))
-    full_name = db.Column(db.String(500))
-    email = db.Column(db.String(120), unique=True)
+    username = db.Column(db.String(64), nullable=False, unique=True)
+    password = db.Column(db.String(500), nullable=False)
+    full_name = db.Column(db.String(500), nullable=False)
+    email = db.Column(db.String(120), nullable=False, unique=True)
 
     def set_password(self, password):
         self.password = generate_password_hash(
@@ -41,7 +41,6 @@ class User(UserMixin, db.Model):
             return False
         else:
             return jwt_username == username
-            # return User.query.filter_by(username=username).first()
 
     def __repr__(self):
         return f'<User {self.username}>'
