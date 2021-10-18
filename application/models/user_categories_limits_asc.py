@@ -15,3 +15,7 @@ class UserCategoriesLimitsAsc(UserMixin, db.Model):
     limit_size = db.Column(db.Integer)
     limit_month_number = db.Column(db.Integer)
     currency_id = db.Column(db.Integer, db.ForeignKey('currencies.id'))
+
+    user = db.relationship('User', backref='user_categories_limits_asc')
+    category = db.relationship('Category', backref='user_categories_limits_asc')
+    currency = db.relationship('Currency', backref='user_categories_limits_asc')

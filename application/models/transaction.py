@@ -14,3 +14,7 @@ class Transaction(UserMixin, db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     name = db.Column(db.String(500), nullable=False)
     currency_id = db.Column(db.Integer, db.ForeignKey('currencies.id'), nullable=False)
+
+    user = db.relationship('User', backref='transactions')
+    category = db.relationship('Category', backref='transactions')
+    currency = db.relationship('Currency', backref='transactions')
