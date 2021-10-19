@@ -17,3 +17,4 @@ Flask-Security
 WTForms
 Werkzeug
 PyJWT==1.7.1
+environs

@@ -1,3 +1,9 @@
+from environs import Env
+
+env = Env()
+env.read_env()
+
+
 class Config:
     """
     Configuration base, for all environments.
@@ -5,9 +11,9 @@ class Config:
     DEBUG = False
     TESTING = False
     BOOTSTRAP_FONTAWESOME = True
-    SECRET_KEY = 'd3s"a5hj;d3]fh4[l'
     CSRF_ENABLED = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite3'
+    SECRET_KEY = env.str('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = env.str('SQLALCHEMY_LOCAL_DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
 
@@ -17,18 +23,19 @@ class Config:
 # RECAPTCHA_PRIVATE_KEY = "6LffFNwSAAAAAO7UURCGI7qQ811SOSZlgU69rvv7"
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = 'mysql://user@localhost/foo'
+    SQLALCHEMY_DATABASE_URI = env.str('SQLALCHEMY_PRODUCTION_DATABASE_URI')
+    HOSTNAME = env.str('PRODUCTION_HOSTNAME')
 
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 465
-    MAIL_USERNAME = 'pavel.4.26.21@gmail.com'
-    MAIL_PASSWORD = 'rra-cFC-68U-HXh'
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    HOSTNAME = 'http://127.0.0.1:5000'
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USERNAME = env.str('GMAIL_USERNAME')
+    MAIL_PASSWORD = env.str('GMAIL_PASSWORD')
+    HOSTNAME = env.str('DEVELOPMENT_HOSTNAME')
 
 
 class TestingConfig(Config):
