@@ -1,103 +1,78 @@
-{% extends "base.html" %}
+{% extends "auth/auth_base.html" %}
 
 {% block title %}Money Flow - Register{% endblock %}
 
-{% block content %}
-<div class="container h-100">
-    {% if get_flashed_messages() %}
-    <div class="modal fade" id="modal">
-        <div class="modal-dialog modal-title">
-            {% for message in get_flashed_messages() %}
-                <div class="alert alert-warning">
-                    {{ message }}
-                    <button type="button" class="close" data-dismiss=" modal">x</button>
-                </div>
-            {% endfor %}
+{% block form %}
+    <form method="POST" action="{{ url_for("auth_bp.register") }}">
+        {{ form.csrf_token }}
+        <div class="input-group mb-2">
+            {% if form.full_name.errors %}
+                <ul class="errors">
+                    {% for error in form.full_email.errors %}
+                        <li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
+            </div>
+            {{ form.full_name(placeholder="Full name", class_="form-control input_user") }}
         </div>
-    </div>
-    <script>$("#modal").modal("show")</script>
-    {% endif %}
-    <div class="d-flex justify-content-center h-100">
-        <div class="user_card">
-            <div class="d-flex justify-content-center">
-                <div class="brand_logo_container">
-                    <img src="/static/images/logo-red3.png" class="brand_logo" alt="Logo">
-                </div>
+        <div class="input-group mb-2">
+            {% if form.username.errors %}
+                <ul class="errors">
+                    {% for error in form.username.errors %}
+                        <li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
             </div>
-            <div class="d-flex justify-content-center form_container">
-                <form method="POST" action="{{ url_for("auth_bp.register") }}">
-                    {{ form.csrf_token }}
-                    <div class="input-group mb-2">
-                        {% if form.full_name.errors %}
-                            <ul class="errors">
-                                {% for error in form.full_email.errors %}
-                                    <li>{{ error }}</li>{% endfor %}
-                            </ul>
-                        {% endif %}
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
-                        </div>
-                        {{ form.full_name(placeholder="Full name", class_="form-control input_user") }}
-                    </div>
-                    <div class="input-group mb-2">
-                        {% if form.username.errors %}
-                            <ul class="errors">
-                                {% for error in form.username.errors %}
-                                    <li>{{ error }}</li>{% endfor %}
-                            </ul>
-                        {% endif %}
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
-                        {{ form.username(placeholder="Username", class_="form-control input_user") }}
-                    </div>
-                    <div class="input-group mb-2">
-                        {% if form.email.errors %}
-                            <ul class="errors">
-                                {% for error in form.email.errors %}
-                                    <li>{{ error }}</li>{% endfor %}
-                            </ul>
-                        {% endif %}
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                        </div>
-                        {{ form.email(placeholder="email@example.com", class_="form-control input_user") }}
-                    </div>
-                    <div class="input-group mb-2">
-                        {% if form.password.errors %}
-                            <ul class="errors">
-                                {% for error in form.password.errors %}
-                                    <li>{{ error }}</li>{% endfor %}
-                            </ul>
-                        {% endif %}
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
-                        </div>
-                        {{ form.password(placeholder="Password", class_="form-control input_pass") }}
-                    </div>
-                    <div class="input-group mb-2">
-                        {% if form.confirm.errors %}
-                            <ul class="errors">
-                                {% for error in form.confirm.errors %}
-                                    <li>{{ error }}</li>{% endfor %}
-                            </ul>
-                        {% endif %}
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
-                        </div>
-                        {{ form.confirm(placeholder="Confirm password", class_="form-control input_pass") }}
-                    </div>
-                    <div class="d-flex justify-content-center mt-3 login_container">
-                        {{ form.submit(class_="btn login_btn") }}
-                    </div>
-                </form>
-            </div>
-            <div class="mt-4">
-                <div class="d-flex justify-content-center links">
-                    Already have an account? <a href="{{ url_for("auth_bp.login") }}" class="ml-2">Log in</a>
-                </div>
-            </div>
+            {{ form.username(placeholder="Username", class_="form-control input_user") }}
         </div>
+        <div class="input-group mb-2">
+            {% if form.email.errors %}
+                <ul class="errors">
+                    {% for error in form.email.errors %}
+                        <li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            </div>
+            {{ form.email(placeholder="email@example.com", class_="form-control input_user") }}
+        </div>
+        <div class="input-group mb-2">
+            {% if form.password.errors %}
+                <ul class="errors">
+                    {% for error in form.password.errors %}
+                        <li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-key"></i></span>
+            </div>
+            {{ form.password(placeholder="Password", class_="form-control input_pass") }}
+        </div>
+        <div class="input-group mb-2">
+            {% if form.confirm.errors %}
+                <ul class="errors">
+                    {% for error in form.confirm.errors %}
+                        <li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-key"></i></span>
+            </div>
+            {{ form.confirm(placeholder="Confirm password", class_="form-control input_pass") }}
+        </div>
+        <div class="d-flex justify-content-center mt-3 login_container">
+            {{ form.submit(class_="btn login_btn") }}
+        </div>
+    </form>
+{% endblock %}
+
+{% block additional_buttons %}
+    <div class="d-flex justify-content-center links">
+        Already have an account? <a href="{{ url_for("auth_bp.login") }}" class="ml-2">Log in</a>
     </div>
-</div>
 {% endblock %}
