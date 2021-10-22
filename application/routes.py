@@ -28,9 +28,3 @@ def index():
                                transactions=transactions, currencies=currencies)
 
     return redirect(url_for('auth_bp.login'))
-
-
-@app.route('/currency/<currency_abbreviation>/')
-@login_required
-def change_currency(currency_abbreviation: str):
-    return redirect(url_for('index', currency=currency_abbreviation))

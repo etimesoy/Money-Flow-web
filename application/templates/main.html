@@ -115,7 +115,7 @@
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group mr-2">
                         {% for currency in currencies %}
-                            <a class="btn btn-sm btn-outline-secondary" href="/currency/{{ currency.abbreviation }}">{{ currency.sign }}</a>
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ url_for("index", currency=currency.abbreviation) }}">{{ currency.sign }}</a>
                         {% endfor %}
                     </div>
                     <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
