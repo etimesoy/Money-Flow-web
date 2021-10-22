@@ -139,32 +139,37 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
             <script>
                 var ctx = document.getElementById("transactionsChart");
+                var datasets = [];
+                {% if expenses %}
+                    datasets.push({
+                        data: {{ expenses | safe }},
+                        label: 'Expenses',
+                        fill: true,
+                        lineTension: 0.5,
+                        borderWidth: 3,
+                        backgroundColor: '#63a5fd',
+                        borderColor: '#007bff',
+                        pointBackgroundColor: '#007bff'
+                    })
+                {% endif %}
+                {% if incomes %}
+                    datasets.push({
+                        data: {{ incomes | safe }},
+                        label: 'Incomes',
+                        fill: true,
+                        lineTension: 0.5,
+                        borderWidth: 3,
+                        backgroundColor: '#7ed76c',
+                        borderColor: '#24a313',
+                        pointBackgroundColor: '#24a313'
+                    })
+                {% endif %}
+                datasets.length
                 var transactionsChart = new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: {{ labels | safe }},
-                        datasets: [
-                            {
-                                data: {{ expenses | safe }},
-                                label: 'Expenses',
-                                fill: true,
-                                lineTension: 0.5,
-                                borderWidth: 3,
-                                backgroundColor: '#63a5fd',
-                                borderColor: '#007bff',
-                                pointBackgroundColor: '#007bff'
-                            },
-                            {
-                                data: {{ incomes | safe }},
-                                label: 'Incomes',
-                                fill: true,
-                                lineTension: 0.5,
-                                borderWidth: 3,
-                                backgroundColor: '#7ed76c',
-                                borderColor: '#24a313',
-                                pointBackgroundColor: '#24a313'
-                            }
-                        ]
+                        datasets: datasets
                     },
                     options: {
                         scales: {
