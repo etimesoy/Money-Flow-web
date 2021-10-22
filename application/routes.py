@@ -30,6 +30,7 @@ def index():
         currencies = DatabaseManager.get_all_currencies()
         return render_template('main.html', labels=offset_week_days, currency_sign=currency_sign,
                                expenses=last_7_days_total_expenses, incomes=last_7_days_total_incomes,
-                               transactions=transactions, currencies=currencies)
+                               transactions=transactions, currencies=currencies,
+                               nav_links=get_nav_links(overview=True))
 
     return redirect(url_for('auth_bp.login'))
