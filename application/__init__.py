@@ -34,7 +34,4 @@ def create_app():
         app.register_blueprint(limits.limits_bp)
         app.register_blueprint(categories.categories_bp)
 
-        db.create_all()
-        db.session.commit()
-
         return app
