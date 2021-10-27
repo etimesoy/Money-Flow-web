@@ -27,10 +27,12 @@ def create_app():
     migrate.init_app(app, db)
 
     with app.app_context():
-        from . import routes, auth, settings
+        from . import routes, auth, settings, limits, categories
 
         app.register_blueprint(auth.auth_bp)
         app.register_blueprint(settings.settings_bp)
+        app.register_blueprint(limits.limits_bp)
+        app.register_blueprint(categories.categories_bp)
 
         db.create_all()
         db.session.commit()

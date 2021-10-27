@@ -1,0 +1,63 @@
+{% extends "main_page_base.html" %}
+
+{% block title %}Money Flow - Limit{% endblock %}
+
+{% block main %}
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2">
+            <h1 class="h2">Limit info</h1>
+        </div>
+
+        <form method="POST">
+            {% if get_flashed_messages() %}
+                <div class="modal fade" id="modal">
+                    <div class="modal-dialog modal-title">
+                        {% for message in get_flashed_messages() %}
+                            <div class="alert alert-warning">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss=" modal">x</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <script>$("#modal").modal("show")</script>
+            {% endif %}
+
+            <div class="d-flex flex-row ml-2">
+                <label for="property_1" class="h4 p-1">
+                    Category:
+                    <input id="property_1" name="category" class="ml-3 font-weight-light small" type="text" value="{{ limit_info.category.name }}" autocomplete="off">
+                </label>
+            </div>
+            <div class="d-flex flex-row ml-2">
+                <label for="property_2" class="h4 p-1">
+                    Size:
+                    <input id="property_2" name="size" class="ml-3 font-weight-light small" type="text" value="{{ limit_info.limit_size }}" autocomplete="off">
+                </label>
+            </div>
+            <div class="d-flex flex-row ml-2">
+                <label for="property_3" class="h4 p-1">
+                    Currency abbreviation:
+                    <input id="property_3" name="currency" class="ml-3 font-weight-light small" type="text" value="{{ limit_info.currency.abbreviation }}" autocomplete="off">
+                </label>
+            </div>
+            <div class="d-flex flex-row ml-2">
+                <label for="property_4" class="h4 p-1">
+                    Year:
+                    <input id="property_4" name="year" class="ml-3 font-weight-light small" type="text" value="{{ limit_info.limit_year_number }}" autocomplete="off">
+                </label>
+            </div>
+            <div class="d-flex flex-row ml-2">
+                <label for="property_5" class="h4 p-1">
+                    Month number:
+                    <input id="property_5" name="month" class="ml-3 font-weight-light small" type="text" value="{{ limit_info.limit_month_number }}" autocomplete="off">
+                </label>
+            </div>
+
+            <div class="d-flex flex-row">
+                <a class="btn btn-secondary" href="{{ url_for("limits_bp.limits") }}">Cancel</a>
+                <input class="btn btn-primary ml-2" type="submit" value="Save">
+            </div>
+        </form>
+    </main>
+{% endblock %}
