@@ -8,11 +8,11 @@ def convert_currency(amount: int, from_currency_abbreviation: str, to_currency_a
         },
         'USD': {
             'RUB': 72,
-            'EUR': 1.16
+            'EUR': 1 / 1.16
         },
         'EUR': {
             'RUB': 82,
-            'USD': 1 / 1.16
+            'USD': 1.16
         }
     }
     return amount * converter[from_currency_abbreviation][to_currency_abbreviation]
