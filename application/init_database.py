@@ -1,5 +1,4 @@
-from flask import current_app as app
-
+from wsgi import app
 from application import db
 from application.models.category import Category
 from application.models.currency import Currency
