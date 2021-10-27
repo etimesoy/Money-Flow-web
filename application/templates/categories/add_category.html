@@ -1,0 +1,39 @@
+{% extends "main_page_base.html" %}
+
+{% block title %}Money Flow - Add category{% endblock %}
+
+{% block main %}
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2">
+            <h1 class="h2">New category</h1>
+        </div>
+
+        <form method="POST">
+            {% if get_flashed_messages() %}
+                <div class="modal fade" id="modal">
+                    <div class="modal-dialog modal-title">
+                        {% for message in get_flashed_messages() %}
+                            <div class="alert alert-warning">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss=" modal">x</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <script>$("#modal").modal("show")</script>
+            {% endif %}
+
+            <div class="d-flex flex-row ml-2">
+                <label for="property_1" class="h4 p-1">
+                    Name:
+                    <input id="property_1" name="category_name" class="ml-3 font-weight-light small" type="text" placeholder="name" autocomplete="off">
+                </label>
+            </div>
+
+            <div class="d-flex flex-row">
+                <a class="btn btn-secondary" href="{{ url_for("limits_bp.limits") }}">Cancel</a>
+                <input class="btn btn-primary ml-2" type="submit" value="Add category">
+            </div>
+        </form>
+    </main>
+{% endblock %}
