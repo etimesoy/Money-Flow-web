@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, current_user, login_required
 
-from application import db, login_manager
+from application import login_manager
 from application.forms import LoginForm, RegisterForm, ForgotPasswordForm, PasswordResetForm
-from application.models.user import User
+from application.services.database_manager import DatabaseManager
 from application.services.email import send_email
 
 auth_bp = Blueprint(
@@ -20,12 +20,13 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = DatabaseManager.get_user(username=form.username.data)
         if user and user.check_password(form.password.data):
             remember_me = form.remember_me.data
             login_user(user, remember=remember_me)
             next_page = request.args.get('next')
             return redirect(next_page or url_for('index'))
+
         flash('Invalid username/password combination, please try again')
         return redirect(url_for('auth_bp.login'))
 
@@ -36,18 +37,13 @@ def login():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        existing_user = User.query.filter_by(username=form.username.data).first()
+        existing_user = DatabaseManager.get_user(username=form.username.data)
         if existing_user is None:
-            user = User(
-                username=form.username.data,
-                full_name=form.full_name.data,
-                email=form.email.data
-            )
-            user.set_password(form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
+            new_user = DatabaseManager.add_user(form.username.data, form.password.data, form.full_name.data, form.email.data)
+            login_user(new_user)
+            DatabaseManager.add_default_categories_to_user(current_user.id)
             return redirect(url_for('index'))
+
         flash('A user with such username already exists')
         return redirect(url_for('auth_bp.register'))
 
@@ -58,7 +54,7 @@ def register():
 def forgot_password():
     form = ForgotPasswordForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = DatabaseManager.get_user(email=form.email.data)
         if user:
             send_email(user)
             flash('Email with reset link was sent, please check your inbox')
@@ -76,14 +72,13 @@ def password_reset(username: str, password_reset_code: str):
         return redirect(url_for('index'))
 
     form = PasswordResetForm()
-    user = User.query.filter_by(username=username).first()
+    user = DatabaseManager.get_user(username=username)
     if not user:
         flash('Wrong username - user does not exist')
         return redirect(url_for('auth_bp.forgot_password'))
 
     if form.validate_on_submit():
-        user.set_password(form.new_password.data)
-        db.session.commit()
+        DatabaseManager.update_user_password(username, form.new_password.data)
         login_user(user)
         return redirect(url_for('index'))
 
@@ -104,7 +99,7 @@ def logout():
 @login_manager.user_loader
 def load_user(user_id):
     if user_id is not None:
-        return User.query.get(int(user_id))
+        return DatabaseManager.get_user(user_id=int(user_id))
     return None
 
 

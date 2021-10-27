@@ -142,6 +142,27 @@ class DatabaseManager:
         db.session.commit()
 
     @classmethod
+    def add_user(cls, username: str, password: str, full_name: str, email: str) -> User:
+        user = User(
+            username=username,
+            full_name=full_name,
+            email=email
+        )
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        return user
+
+    @classmethod
+    def add_default_categories_to_user(cls, user_id: int):
+        for category_id in range(1, 7):
+            user_categories_limits_asc = UserCategoriesLimitsAsc(
+                user_id=user_id, category_id=category_id
+            )
+            db.session.add(user_categories_limits_asc)
+        db.session.commit()
+
+    @classmethod
     def add_transaction(cls, user_id: int,
                         is_expense: bool,
                         transaction_date: date,
@@ -224,4 +245,10 @@ class DatabaseManager:
         user_categories_limits_asc.limit_month_number = month_number
         user_categories_limits_asc.limit_year_number = year
         user_categories_limits_asc.currency_id = currency_id
+        db.session.commit()
+
+    @classmethod
+    def update_user_password(cls, username: str, new_password: str):
+        user = User.query.filter_by(username=username).first()
+        user.set_password(new_password)
         db.session.commit()
