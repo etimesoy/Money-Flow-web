@@ -219,15 +219,10 @@ class DatabaseManager:
             raise LimitAlreadyExistsError(f'Limit for category {category_name} already exists')
 
         currency_id = cls.get_currency_id(currency_abbreviation)
-        user_categories_limits_asc = UserCategoriesLimitsAsc(
-            user_id=user_id,
-            category_id=category_id,
-            limit_size=size,
-            limit_year_number=year,
-            limit_month_number=month_number,
-            currency_id=currency_id
-        )
-        db.session.add(user_categories_limits_asc)
+        user_category_limit_asc.limit_size = size
+        user_category_limit_asc.limit_year_number = year,
+        user_category_limit_asc.limit_month_number = month_number,
+        user_category_limit_asc.currency_id = currency_id
         db.session.commit()
 
     @classmethod
