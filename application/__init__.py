@@ -15,7 +15,7 @@ migrate = Migrate()
 def create_app():
     from . import models
 
-    app = Flask(__name__, static_folder='templates', instance_relative_config=False)
+    app = Flask(__name__, static_folder='static', template_folder='templates', instance_relative_config=False)
     app.config.from_object(DevelopmentConfig)
 
     app.jinja_env.add_extension('jinja2.ext.do')
@@ -27,7 +27,7 @@ def create_app():
     migrate.init_app(app, db)
 
     with app.app_context():
-        from . import routes, auth, settings, limits, categories
+        from application.controllers import routes, auth, settings, limits, categories
 
         app.register_blueprint(auth.auth_bp)
         app.register_blueprint(settings.settings_bp)
