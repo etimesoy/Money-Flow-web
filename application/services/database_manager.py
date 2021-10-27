@@ -103,6 +103,8 @@ class DatabaseManager:
     def get_limits(cls, user_id: int) -> List[UserCategoriesLimitsAsc]:
         return list(UserCategoriesLimitsAsc.query.filter_by(
             user_id=user_id
+        ).where(
+            UserCategoriesLimitsAsc.limit_size.is_not(None)
         ).order_by(
             UserCategoriesLimitsAsc.category_id
         ).all())
@@ -116,6 +118,10 @@ class DatabaseManager:
         ).filter(
             UserCategoriesLimitsAsc.user_id == user_id,
             Category.name.ilike(f'%{category_name}%')
+        ).where(
+            UserCategoriesLimitsAsc.limit_size.is_not(None)
+        ).order_by(
+            UserCategoriesLimitsAsc.category_id
         ).all()
 
     @classmethod

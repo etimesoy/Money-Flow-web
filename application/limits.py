@@ -71,14 +71,6 @@ def search_department_by_name():
     json_content = request.get_json()
     user_limits = DatabaseManager.get_limits_by_category_name_part(current_user.id, json_content['categoryName'])
     result = []
-    """
-    <td><a href="{{ url_for("limits_bp.limits", limit_no=idx) }}">{{ idx }}</a></td>
-    <td>{{ limit.category.name }}</td>
-    <td>{{ limit.limit_size }}</td>
-    <td>{{ limit.currency.abbreviation }}</td>
-    <td>{{ limit.limit_year_number }}</td>
-    <td>{{ limit.limit_month_number }}</td>
-    """
     for idx, limit in enumerate(user_limits):
         result.append([
             f'<a href="{ url_for("limits_bp.limits", limit_no=idx) }">{ idx }</a>',
