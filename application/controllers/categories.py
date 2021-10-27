@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 
 from application.services.database_manager import DatabaseManager
+from application.services.categories_info import get_categories_expenses, get_categories_limits
 from application.services.sidebar_links import get_nav_links
 
 categories_bp = Blueprint(
@@ -15,10 +16,14 @@ categories_bp = Blueprint(
 @categories_bp.route('/')
 @login_required
 def categories():
-    user_categories = DatabaseManager.get_categories_names(current_user.id)
+    user_categories_names = DatabaseManager.get_categories_names(current_user.id)
+    user_categories_expenses = get_categories_expenses(current_user.id)
+    user_categories_limits = get_categories_limits(current_user.id)
     return render_template('categories/categories.html',
                            nav_links=get_nav_links(categories=True),
-                           enumerated_categories=enumerate(user_categories))
+                           enumerated_categories=enumerate(user_categories_names),
+                           categories_expenses=user_categories_expenses,
+                           categories_limits=user_categories_limits)
 
 
 @categories_bp.route('/new/', methods=['GET', 'POST'])

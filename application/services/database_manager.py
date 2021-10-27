@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, date
 from typing import List
 
-from sqlalchemy import text
+from sqlalchemy import text, String
 
 from application import db
 from application.models.category import Category
@@ -98,13 +98,17 @@ class DatabaseManager:
         ).order_by(
             Transaction.date
         ).where(
-            Transaction.date.like(f'{year_no}-{month_no}-%')
+            Transaction.date.cast(String).like(f'{year_no}-{month_no}-%')
         ).all())
 
     @classmethod
-    def get_limits(cls, user_id: int) -> List[UserCategoriesLimitsAsc]:
+    def get_limits(cls, user_id: int, in_current_month: bool = False) -> List[UserCategoriesLimitsAsc]:
+        filters = {}
+        if in_current_month:
+            filters['limit_month_number'] = datetime.now().month
+            filters['limit_year_number'] = datetime.now().year
         return list(UserCategoriesLimitsAsc.query.filter_by(
-            user_id=user_id
+            user_id=user_id, **filters
         ).where(
             UserCategoriesLimitsAsc.limit_size.is_not(None)
         ).order_by(
@@ -127,11 +131,19 @@ class DatabaseManager:
         ).all()
 
     @classmethod
-    def get_categories_names(cls, user_id: int):
+    def get_categories_names(cls, user_id: int) -> List[str]:
         user_categories_limits = list(UserCategoriesLimitsAsc.query.filter_by(
             user_id=user_id
         ).all())
         return list(map(lambda x: x.category.name, user_categories_limits))
+
+    @classmethod
+    def get_total_expenses_in_categories(cls, user_id: int):
+        user_categories_expenses = list(Transaction.query.filter(
+            Transaction.user_id == user_id,
+            Transaction.is_expense
+        ).all())
+        return user_categories_expenses
 
     @classmethod
     def update_user(cls, user_id: int, username: str, full_name: str, email: str):

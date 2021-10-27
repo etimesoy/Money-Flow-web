@@ -28,6 +28,8 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>This month total expenses, ₽</th>
+                    <th>This month limits, ₽</th>
                 </tr>
                 </thead>
                 <tbody id="limits-tbody">
@@ -35,6 +37,16 @@
                     <tr>
                         <td>{{ idx }}</td>
                         <td>{{ category }}</td>
+                        <td>{% if categories_expenses.get(category) %}
+                            {{ categories_expenses.get(category) }}
+                        {% else %}
+                            0
+                        {% endif %}</td>
+                        <td>{% if categories_limits.get(category) %}
+                            {{ categories_limits.get(category) }}
+                        {% else %}
+                            no limit
+                        {% endif %}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
