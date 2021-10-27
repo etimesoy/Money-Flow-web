@@ -56,9 +56,6 @@ def register():
 
 @auth_bp.route('/forgot_password/', methods=['GET', 'POST'])
 def forgot_password():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-
     form = ForgotPasswordForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()

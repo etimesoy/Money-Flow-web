@@ -1,8 +1,10 @@
 def get_nav_links(overview: bool = False,
                   limits: bool = False,
-                  reports: bool = False) -> dict:
+                  settings: bool = False,
+                  categories: bool = False) -> dict:
     return {
         "overview": "active" if overview else "",
         "limits": "active" if limits else "",
-        "reports": "active" if reports else ""
+        "settings": "active" if settings else "",
+        "categories": "active" if categories else "",
     }
