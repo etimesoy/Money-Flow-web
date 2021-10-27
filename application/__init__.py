@@ -18,6 +18,8 @@ def create_app():
     app = Flask(__name__, static_folder='templates', instance_relative_config=False)
     app.config.from_object(DevelopmentConfig)
 
+    app.jinja_env.add_extension('jinja2.ext.do')
+
     db.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'login'
