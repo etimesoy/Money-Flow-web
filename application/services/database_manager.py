@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta, date
 from typing import List
 
+from sqlalchemy import text
+
 from application import db
 from application.models.category import Category
 from application.models.currency import Currency
@@ -21,10 +23,10 @@ class DatabaseManager:
     @classmethod
     def get_currency_sign(cls, currency_abbreviation: str):
         with db.engine.connect() as conn:
-            query = """
+            query = text("""
             SELECT sign FROM currencies
             WHERE abbreviation=:currency_abbreviation
-            """
+            """)
             result = conn.execute(query, currency_abbreviation=currency_abbreviation).fetchone()
         return result[0]
 
