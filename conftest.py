@@ -41,6 +41,7 @@ def logged_in_client(client):
     db.session.commit()
     client.post(url_for('auth_bp.login'), data=dict(username='etimesoy', password='123456'))
     setattr(client, 'id', 1)
+    setattr(client, 'username', 'etimesoy')
     yield client
     client.get(url_for('auth_bp.logout'))
 
