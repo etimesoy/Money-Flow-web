@@ -15,7 +15,6 @@ class Config:
     SECRET_KEY = env.str('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = env.str('SQLALCHEMY_LOCAL_DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_ECHO = True
 
 
 class ProductionConfig(Config):
@@ -36,3 +35,6 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
+    WTF_CSRF_ENABLED = False
+    SQLALCHEMY_ECHO = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///db_for_tests.sqlite3'
