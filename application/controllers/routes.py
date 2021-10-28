@@ -6,7 +6,7 @@ from flask_login import current_user, login_required
 
 from application.services.currency_converter import convert_currency
 from application.services.database_manager import DatabaseManager
-from application.services.date_handlers import get_month_days_count, get_offset_year_month
+from application.services.date_handlers import get_month_days_count, get_offset_year_month, get_month_days
 from application.services.offsets import get_offset_week_days, offset_list
 from application.services.sidebar_links import get_nav_links
 
@@ -38,24 +38,29 @@ def index():
             last_transactions = DatabaseManager.get_month_transactions(current_user.id, offset_year, offset_month, expenses=expenses)
             total_expenses_for_time_interval, total_incomes_for_time_interval = [0] * month_days_count, [0] * month_days_count
 
+        show_week = time_interval == 'week'
         for transaction in last_transactions:
             amount = convert_currency(transaction.amount, transaction.currency.abbreviation, currency_abbreviation)
             transaction_weekday = transaction.date.weekday()
+            transaction_day = transaction.date.day - 1
             if transaction.is_expense:
-                total_expenses_for_time_interval[transaction_weekday] += amount
+                total_expenses_for_time_interval[transaction_weekday if show_week else transaction_day] += amount
             else:
-                total_incomes_for_time_interval[transaction_weekday] += amount
+                total_incomes_for_time_interval[transaction_weekday if show_week else transaction_day] += amount
 
-        offset_week_days, offset_value = get_offset_week_days(return_offset=True)
-        total_expenses_for_time_interval = offset_list(total_expenses_for_time_interval, offset_value)
-        total_incomes_for_time_interval = offset_list(total_incomes_for_time_interval, offset_value)
+        if show_week:
+            days_labels, offset_value = get_offset_week_days(return_offset=True)
+            total_expenses_for_time_interval = offset_list(total_expenses_for_time_interval, offset_value)
+            total_incomes_for_time_interval = offset_list(total_incomes_for_time_interval, offset_value)
+        else:
+            days_labels = get_month_days(time_interval_offset)
         currency_sign = DatabaseManager.get_currency_sign(currency_abbreviation)
         currencies = DatabaseManager.get_all_currencies()
         total_transactions = DatabaseManager.get_transactions(current_user.id, expenses=expenses)
         return render_template('transactions/transactions.html', total_transactions=total_transactions,
                                last_expenses=total_expenses_for_time_interval,
                                last_incomes=total_incomes_for_time_interval,
-                               labels=offset_week_days, currency_sign=currency_sign,
+                               labels=days_labels, currency_sign=currency_sign,
                                currencies=currencies, nav_links=get_nav_links(overview=True))
 
     return redirect(url_for('auth_bp.login'))

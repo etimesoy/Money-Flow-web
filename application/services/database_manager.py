@@ -93,6 +93,8 @@ class DatabaseManager:
         }
         if expenses is not None:
             filters['is_expense'] = expenses
+        if month_no <= 9:
+            month_no = '0' + str(month_no)
         return list(Transaction.query.filter_by(
             **filters
         ).order_by(
