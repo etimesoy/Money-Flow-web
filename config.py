@@ -37,4 +37,4 @@ class TestingConfig(Config):
     TESTING = True
     WTF_CSRF_ENABLED = False
     SQLALCHEMY_ECHO = False
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///db_for_tests.sqlite3'
+    SQLALCHEMY_DATABASE_URI = env.str('SQLALCHEMY_TESTING_DATABASE_URI')
