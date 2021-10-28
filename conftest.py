@@ -40,6 +40,7 @@ def logged_in_client(client):
     db.session.add(Category(name='household', image='household.png'))
     db.session.commit()
     client.post(url_for('auth_bp.login'), data=dict(username='etimesoy', password='123456'))
+    setattr(client, 'id', 1)
     yield client
     client.get(url_for('auth_bp.logout'))
 
@@ -54,3 +55,18 @@ def logged_in_another_client(client):
     setattr(client, 'username', 'test_username')
     yield client
     client.get(url_for('auth_bp.logout'))
+
+
+@pytest.fixture()
+def logged_in_client_with_limit(logged_in_client):
+    user_category_limit_asc = UserCategoriesLimitsAsc.query.filter_by(
+        user_id=logged_in_client.id,
+        category_id=4
+    ).first()
+    user_category_limit_asc.limit_size = 500
+    user_category_limit_asc.limit_year_number = 2021
+    user_category_limit_asc.limit_month_number = 10
+    user_category_limit_asc.currency_id = 2
+    setattr(logged_in_client, 'limit_category', 'health')
+    setattr(logged_in_client, 'limit_size', 500)
+    yield logged_in_client
