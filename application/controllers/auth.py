@@ -44,7 +44,7 @@ def register():
             DatabaseManager.add_default_categories_to_user(current_user.id)
             return redirect(url_for('index'))
 
-        flash('A user with such username already exists')
+        flash('User with such username already exists')
         return redirect(url_for('auth_bp.register'))
 
     return render_template('auth/register.html', form=form)
