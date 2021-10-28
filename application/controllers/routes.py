@@ -102,7 +102,7 @@ def check_transaction_info(transaction_type: str, transaction_date: str,
         return False
     try:
         date.fromisoformat(transaction_date)
-    except TypeError:
+    except (TypeError, ValueError):
         flash('Date should be date-like')
         return False
     if len(name) == 0:
@@ -116,5 +116,8 @@ def check_transaction_info(transaction_type: str, transaction_date: str,
         return False
     if transaction_type.lower() == 'expense' and category.lower() not in categories_names:
         flash(f'Category name should be one of the following: {categories_names}')
+        return False
+    if transaction_type.lower() == 'income' and len(category) > 0:
+        flash('Income transactions should not have category')
         return False
     return True
