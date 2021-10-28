@@ -55,7 +55,7 @@ def add_limit():
             return redirect(url_for('limits_bp.add_limit'))
 
         try:
-            DatabaseManager.add_limit(current_user.id, category, size, currency_abbreviation, year, month_number)
+            DatabaseManager.add_limit(current_user.id, category, int(size), currency_abbreviation, int(year), int(month_number))
         except LimitAlreadyExistsError as e:
             flash(str(e) or 'Unknown error')
         finally:
@@ -67,7 +67,7 @@ def add_limit():
 
 @limits_bp.route('/search/', methods=['GET', 'POST'])
 @login_required
-def search_department_by_name():
+def search_limit_by_name():
     json_content = request.get_json()
     user_limits = DatabaseManager.get_limits_by_category_name_part(current_user.id, json_content['categoryName'])
     result = []

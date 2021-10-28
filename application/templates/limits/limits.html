@@ -56,7 +56,7 @@
             const limitTbodyElement = document.getElementById('limits-tbody');
 
             limitInputElement.addEventListener('keyup', async function (e) {
-                const rawResponse = await fetch('{{ url_for('limits_bp.search_department_by_name') }}', {
+                const rawResponse = await fetch('{{ url_for('limits_bp.search_limit_by_name') }}', {
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
