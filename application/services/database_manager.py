@@ -234,8 +234,8 @@ class DatabaseManager:
 
         currency_id = cls.get_currency_id(currency_abbreviation)
         user_category_limit_asc.limit_size = size
-        user_category_limit_asc.limit_year_number = year,
-        user_category_limit_asc.limit_month_number = month_number,
+        user_category_limit_asc.limit_year_number = year
+        user_category_limit_asc.limit_month_number = month_number
         user_category_limit_asc.currency_id = currency_id
         db.session.commit()
 
